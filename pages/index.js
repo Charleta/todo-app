@@ -6,13 +6,14 @@ export default function Home() {
 
   const [tareas , setTareas] = useState([]);
 
-  const agregarTarea = (nuevaTarea) =>{
+  const agregarTarea = (tarea) =>{
     const nuevaTarea = {
       id: Date.now(),
-      texto: nuevaTarea,
+      tarea,
       completada: false
     }
     setTareas([...tareas, nuevaTarea]);
+    console.log("Tarea agregada:", nuevaTarea);
 
   }
   return (

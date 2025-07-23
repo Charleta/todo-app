@@ -7,6 +7,8 @@ export default function TareasForm({ agregar }) {
     e.preventDefault();
     if (tarea.trim() === "") return;
     console.log(tarea);
+    agregar(tarea);
+    setTarea("");
   };
 
   return (
