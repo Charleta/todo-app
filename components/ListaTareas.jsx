@@ -1,15 +1,6 @@
 import { Boton } from "./Boton";
 
-
-
-    
-
-
-const eliminarTarea = () => {
-  console.log("Tarea eliminada");
-};
-
-export const ListaTareas = ({ tareas , estadoTarea}) => {
+export const ListaTareas = ({ tareas, estadoTarea, eliminar }) => {
   return (
     <ul>
       {tareas.map((tarea) => (
@@ -21,8 +12,8 @@ export const ListaTareas = ({ tareas , estadoTarea}) => {
             <span>No completado</span>
           )}
 
-          <Boton text="Estado" type={()=>estadoTarea(tarea.id)} />
-          <Boton text="Eliminar" type={eliminarTarea} />
+          <Boton text="Estado" type={() => estadoTarea(tarea.id)} />
+          <Boton text="Eliminar" type={() => eliminar(tarea.id)} />
         </li>
       ))}
     </ul>
