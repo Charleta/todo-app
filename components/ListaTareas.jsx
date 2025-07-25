@@ -1,21 +1,43 @@
 import { Boton } from "./Boton";
 
-export const ListaTareas = ({ tareas, estadoTarea, eliminar }) => {
+export const ListaTareas = ({
+  tareas,
+  estadoTarea,
+  eliminar,
+  editar,
+  setIdTareaEditar,
+  idTareaEditar,
+}) => {
   return (
     <ul>
-      {tareas.map((tarea) => (
-        <li key={tarea.id}>
-          <span>{tarea.tarea}</span>
-          {tarea.completada ? (
-            <span>Completado</span>
-          ) : (
-            <span>No completado</span>
-          )}
+      {tareas.map((tarea) =>
+      
+        idTareaEditar === tarea.id ? (
+          <form
+            key={tarea.id}
+            onSubmit={(e) => {
+              e.preventDefault;
+              editar(tarea.id, e.target.tarea.value);
+            }}
+          >
+            <input type="text" name="tarea" defaultValue={tarea.tarea} />
+            <button type="submit">Guardar</button>
+          </form>
+        ) : (
+          <li key={tarea.id}>
+            <span>{tarea.tarea}</span>
+            {tarea.completada ? (
+              <span>Completado</span>
+            ) : (
+              <span>No completado</span>
+            )}
 
-          <Boton text="Estado" type={() => estadoTarea(tarea.id)} />
-          <Boton text="Eliminar" type={() => eliminar(tarea.id)} />
-        </li>
-      ))}
+            <Boton text="Estado" type={() => estadoTarea(tarea.id)} />
+            <Boton text="Eliminar" type={() => eliminar(tarea.id)} />
+            <Boton text="Editar" type={() => setIdTareaEditar(tarea.id)} />
+          </li>
+        )
+      )}
     </ul>
   );
 };
