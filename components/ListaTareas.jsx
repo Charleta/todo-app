@@ -16,7 +16,7 @@ export const ListaTareas = ({
           <form
             key={tarea.id}
             onSubmit={(e) => {
-              e.preventDefault;
+              e.preventDefault();
               editar(tarea.id, e.target.tarea.value);
             }}
           >
@@ -26,6 +26,7 @@ export const ListaTareas = ({
         ) : (
           <li key={tarea.id}>
             <span>{tarea.tarea}</span>
+            <span>{tarea.categoria}</span>
             {tarea.completada ? (
               <span>Completado</span>
             ) : (

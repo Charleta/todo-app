@@ -1,5 +1,5 @@
 import TareasForm from "@/components/TareasForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ListaTareas } from "@/components/ListaTareas";
 import { db } from "@/services/firebaseConfig";
 import {
@@ -9,22 +9,41 @@ import {
   getDocs,
   doc,
   updateDoc,
+  deleteDoc
 } from "firebase/firestore";
+import { Buscar } from "@/components/Buscar";
 
 export default function Home() {
   const [tareas, setTareas] = useState([]);
   const [idTareaEditar, setIdTareaEditar] = useState(null);
+  const [tareasFiltradas, setTareasFiltradas] = useState ([])
 
-  const agregarTarea = async (tarea) => {
+  useEffect(() => {
+    const fetchTareas = async () => {
+      const querySnapshot = await getDocs(collection(db, "tareas"));
+      console.log(querySnapshot.docs);
+      const tareasData = querySnapshot.docs.map((doc) =>{
+        return { id: doc.id, ...doc.data() };
+      })
+      setTareas(tareasData);
+      ;
+    };
+   
+    fetchTareas();
+  },[setTareas]);
+
+  const agregarTarea = async (tarea, categoria) => {
     // console.log("Tarea agregada:", nuevaTarea);
     try {
       const docRef = await addDoc(collection(db, "tareas"), {
         tarea: tarea,
+        categoria: categoria,
         completada: false,
       });
 
       const nuevaTarea = {
         id: docRef.id,
+        categoria: categoria,
         tarea,
         completada: false,
       };
@@ -51,9 +70,13 @@ export default function Home() {
     });
   };
 
-  const eliminarTarea = (id) => {
+  const eliminarTarea = async (id) => {
     const tareasActualizadas = tareas.filter((tarea) => tarea.id !== id);
     setTareas(tareasActualizadas);
+
+    const ref= doc(db, "tareas", id);
+    await deleteDoc(ref);
+
   };
 
   const editarTarea = async (id, nuevaTarea) => {
@@ -72,8 +95,9 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <h1 className="text-3xl font-bold text-blue-600">Gestor de Tareas</h1>
       <TareasForm agregar={agregarTarea} />
+      <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} />
       <ListaTareas
-        tareas={tareas}
+        tareas={tareasFiltradas.length > 0 ? tareasFiltradas : tareas}
         estadoTarea={estadoTarea}
         eliminar={eliminarTarea}
         editar={editarTarea}
