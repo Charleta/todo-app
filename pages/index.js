@@ -1,6 +1,7 @@
 import TareasForm from "@/components/TareasForm";
 import { useState, useEffect } from "react";
 import { ListaTareas } from "@/components/ListaTareas";
+import { Boton } from "@/components/Boton";
 import { db } from "@/services/firebaseConfig";
 import {
   addDoc,
@@ -30,7 +31,7 @@ export default function Home() {
     };
    
     fetchTareas();
-  },[setTareas]);
+  },[]);
 
   const agregarTarea = async (tarea, categoria) => {
     // console.log("Tarea agregada:", nuevaTarea);
@@ -86,24 +87,44 @@ export default function Home() {
     setTareas(tareaNueva);
     const ref = doc(db, "tareas", id);
     await updateDoc(ref, {
-      tarea: nuevaTarea,
+      tarea: nuevaTarea,ñ
     });
     setIdTareaEditar(null);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-600">Gestor de Tareas</h1>
-      <TareasForm agregar={agregarTarea} />
-      <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} />
-      <ListaTareas
-        tareas={tareasFiltradas.length > 0 ? tareasFiltradas : tareas}
-        estadoTarea={estadoTarea}
-        eliminar={eliminarTarea}
-        editar={editarTarea}
-        idTareaEditar={idTareaEditar}
-        setIdTareaEditar={setIdTareaEditar}
-      />
+    <div className="p-6 min-h-screen bg-gradient-to-br from-green-200 to-teal-200 ">
+      <div className="bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100">
+        <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 p-6">
+          <h1 className="text-3xl font-bold text-gray-900 text-center">
+            Gestor de Tareas
+          </h1>
+        </div>{" "}
+        <div className="mb-8 space-y-4">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+            <TareasForm agregar={agregarTarea} />
+          </div>
+          <div className="flex justify-between bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+            <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} />
+            
+            <Boton type={() => setTareasFiltradas([])} text="Todos" />
+          </div>
+        </div>
+        {/* <TareasForm agregar={agregarTarea} /> */}
+        {/* <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} /> */}
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-white/20">
+          <div className="p-4">
+            <ListaTareas
+              tareas={tareasFiltradas.length > 0 ? tareasFiltradas : tareas}
+              estadoTarea={estadoTarea}
+              eliminar={eliminarTarea}
+              editar={editarTarea}
+              idTareaEditar={idTareaEditar}
+              setIdTareaEditar={setIdTareaEditar}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
