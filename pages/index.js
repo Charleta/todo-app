@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { ListaTareas } from "@/components/ListaTareas";
 import { Boton } from "@/components/Boton";
 import { db } from "@/services/firebaseConfig";
+import { getAuth ,createUserWithEmailAndPassword } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -10,7 +11,8 @@ import {
   getDocs,
   doc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  
 } from "firebase/firestore";
 import { Buscar } from "@/components/Buscar";
 
@@ -87,14 +89,35 @@ export default function Home() {
     setTareas(tareaNueva);
     const ref = doc(db, "tareas", id);
     await updateDoc(ref, {
-      tarea: nuevaTarea,ñ
+      tarea: nuevaTarea,
     });
     setIdTareaEditar(null);
   };
 
+  const [email, setEmail] = useState("");
+  const [passwoard, setPasswoard] = useState("");
+  const newUser = async (e) =>{
+    e.preventDefault();
+   
+       const auth= getAuth();
+       try {
+        const userCREDENTIAL = await createUserWithEmailAndPassword(auth, email , passwoard)
+        const user = userCREDENTIAL.user;
+       } catch (error) {
+    console.error("Error al crear usuario:", error);
+    // Manejo de errores, por ejemplo, mostrar un mensaje al usuario
+  }
+  
+}
+
+
+ 
+  
+  
+ 
   return (
     <div className="p-6 min-h-screen bg-gradient-to-br from-green-200 to-teal-200 ">
-      <div className="bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100">
+      <div className="bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100  ">
         <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 p-6">
           <h1 className="text-3xl font-bold text-gray-900 text-center">
             Gestor de Tareas
@@ -104,15 +127,15 @@ export default function Home() {
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
             <TareasForm agregar={agregarTarea} />
           </div>
-          <div className="flex justify-between bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+          <div className="flex justify-between bg-white/10 backdrop-blur-sm rounded border-b-green-500 p-4 border border-white/20">
             <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} />
-            
+
             <Boton type={() => setTareasFiltradas([])} text="Todos" />
           </div>
         </div>
         {/* <TareasForm agregar={agregarTarea} /> */}
         {/* <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} /> */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-white/20">
+        <div className="bg-transparent backdrop-blur-sm rounded-xl  shadow-lg border border-white/20 ">
           <div className="p-4">
             <ListaTareas
               tareas={tareasFiltradas.length > 0 ? tareasFiltradas : tareas}
@@ -124,6 +147,14 @@ export default function Home() {
             />
           </div>
         </div>
+      </div>
+      <div>
+        <form onSubmit={newUser}>
+          <input type="mail" placeholder="Ingrese su mail" value={email} 
+          onChange={(e)=>setEmail(e.target.value)} />
+          <input type="text" placeholder="Ingrese su contraseña" value={passwoard} onChange={(e)=>setPasswoard(e.target.value)}/>
+          <Boton text="Ingresar" />
+        </form>
       </div>
     </div>
   );
