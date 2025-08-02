@@ -13,7 +13,8 @@ export default function TareasForm({ agregar }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex items-center space-x-4">
+      <form onSubmit={handleSubmit} className="flex flex-col  md:flex-row items-center justify-center space-y-4 space-x-4">
+        <div>
         <span className="text-gray-900 font-medium">Nueva tarea:</span>
         <input
           type="text"
@@ -32,6 +33,7 @@ export default function TareasForm({ agregar }) {
           <option value="hogar">Hogar</option>
           <option value="otros">Otros</option>
         </select>
+        </div>
         <button
           type="submit"
           className="px-6 py-2 bg-green-500 text-gray-900 rounded-lg hover:bg-green-600 transition-colors font-medium"

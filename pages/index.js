@@ -15,6 +15,7 @@ import {
   
 } from "firebase/firestore";
 import { Buscar } from "@/components/Buscar";
+import { Login } from "@/components/Login";
 
 export default function Home() {
   const [tareas, setTareas] = useState([]);
@@ -105,6 +106,8 @@ export default function Home() {
         const user = userCREDENTIAL.user;
        } catch (error) {
     console.error("Error al crear usuario:", error);
+    setEmail("");
+    setPasswoard("")
     // Manejo de errores, por ejemplo, mostrar un mensaje al usuario
   }
   
@@ -149,12 +152,12 @@ export default function Home() {
         </div>
       </div>
       <div>
-        <form onSubmit={newUser}>
-          <input type="mail" placeholder="Ingrese su mail" value={email} 
-          onChange={(e)=>setEmail(e.target.value)} />
-          <input type="text" placeholder="Ingrese su contraseña" value={passwoard} onChange={(e)=>setPasswoard(e.target.value)}/>
-          <Boton text="Ingresar" />
-        </form>
+        <Login
+          newUser={newUser}
+          setEmail={setEmail}
+          setPasswoard={setPasswoard}
+        />
+       
       </div>
     </div>
   );
