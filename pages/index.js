@@ -123,17 +123,21 @@ export default function Home() {
       <div className="bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100  ">
         <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 p-6">
           <h1 className="text-3xl font-bold text-gray-900 text-center">
-            Gestor de Tareas
+           Administrador de Tareas
           </h1>
         </div>{" "}
         <div className="mb-8 space-y-4">
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
             <TareasForm agregar={agregarTarea} />
           </div>
-          <div className="flex justify-between bg-white/10 backdrop-blur-sm rounded border-b-green-500 p-4 border border-white/20">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white/10 backdrop-blur-sm rounded border-b-green-500 p-4 border border-white/20">
             <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} />
 
-            <Boton type={() => setTareasFiltradas([])} text="Todos" />
+            <Boton
+              className="w-full md:w-auto px-6 py-2 bg-blue-500 text-gray-900 rounded-lg hover:bg-blue-600 transition-colors font-medium"
+              type={() => setTareasFiltradas([])}
+              text="Todas las tareas"
+            />
           </div>
         </div>
         {/* <TareasForm agregar={agregarTarea} /> */}
@@ -157,7 +161,6 @@ export default function Home() {
           setEmail={setEmail}
           setPasswoard={setPasswoard}
         />
-       
       </div>
     </div>
   );

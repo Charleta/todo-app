@@ -15,12 +15,17 @@ export const Buscar = ({ tareas, setTareasFiltradas }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center space-x-4">
-      <span className="text-gray-900 font-medium">Filtrar por categoría:</span>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-2 px-4 py-4 w-full max-w-xs"
+    >
+      <label className="text-gray-900 font-medium">
+        Filtrar por categoría:
+      </label>
       <select
         name="buscar"
         onChange={(e) => setBusqueda(e.target.value)}
-        className="px-3 py-2 bg-white/90 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+        className="px-4 py-2 bg-white/90 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
       >
         <option value="trabajo">Trabajo</option>
         <option value="estudio">Estudio</option>
@@ -28,7 +33,12 @@ export const Buscar = ({ tareas, setTareasFiltradas }) => {
         <option value="otros">Otros</option>
       </select>
 
-      <Boton text="Buscar" />
+      <div>
+        <Boton
+          className="w-full md:w-60 px-6 py-2 bg-blue-500 text-gray-900 rounded-lg hover:bg-blue-600 transition-colors font-medium"
+          text="Buscar"
+        />
+      </div>
     </form>
   );
 };
