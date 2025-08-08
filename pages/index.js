@@ -15,25 +15,34 @@ import {
   
 } from "firebase/firestore";
 import { Buscar } from "@/components/Buscar";
+import { SkeletonLoading } from "@/components/SkeletonLoading";
 import { Login } from "@/components/Login";
 
 export default function Home() {
   const [tareas, setTareas] = useState([]);
   const [idTareaEditar, setIdTareaEditar] = useState(null);
   const [tareasFiltradas, setTareasFiltradas] = useState ([])
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTareas = async () => {
-      const querySnapshot = await getDocs(collection(db, "tareas"));
+      try {const querySnapshot = await getDocs(collection(db, "tareas"));
       console.log(querySnapshot.docs);
       const tareasData = querySnapshot.docs.map((doc) =>{
         return { id: doc.id, ...doc.data() };
       })
-      setTareas(tareasData);
+    setTareas(tareasData);
+      setLoading(false);
+    } catch (error){
+      console.log(error)
+    }
+      
+      
       ;
     };
    
     fetchTareas();
+    
   },[]);
 
   const agregarTarea = async (tarea, categoria) => {
@@ -121,10 +130,22 @@ export default function Home() {
   return (
     <div className="p-6 min-h-screen bg-gradient-to-br from-green-200 to-teal-200 ">
       <div className="bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100  ">
-        <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 p-6">
-          <h1 className="text-3xl font-bold text-gray-900 text-center">
-           Administrador de Tareas
-          </h1>
+        <div className=" flex justify-between bg-white/10 backdrop-blur-sm border-b border-white/20 p-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 text-center">
+              Administrador de Tareas
+            </h1>
+          </div>
+          <div>
+            <Boton
+              className="bg-yellow-100 hover:-translate-y-1 hover:bg-yellow-400 transition-all hover:shadow-2xl p-2 rounded-lg shadow-lg "
+              text="Ingresar"
+            />
+            <Boton
+              className="bg-yellow-100 hover:-translate-y-1 transition-all hover:shadow-2xl hover:bg-yellow-400 p-2 rounded-lg shadow-sm mx-2"
+              text="Crear cuenta"
+            />
+          </div>
         </div>{" "}
         <div className="mb-8 space-y-4">
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
@@ -142,7 +163,7 @@ export default function Home() {
         </div>
         {/* <TareasForm agregar={agregarTarea} /> */}
         {/* <Buscar tareas={tareas} setTareasFiltradas={setTareasFiltradas} /> */}
-        <div className="bg-transparent backdrop-blur-sm rounded-xl  shadow-lg border border-white/20 ">
+        {loading ?  (<SkeletonLoading/>) : (<div className="bg-transparent backdrop-blur-sm rounded-xl  shadow-lg border border-white/20 ">
           <div className="p-4">
             <ListaTareas
               tareas={tareasFiltradas.length > 0 ? tareasFiltradas : tareas}
@@ -153,15 +174,16 @@ export default function Home() {
               setIdTareaEditar={setIdTareaEditar}
             />
           </div>
-        </div>
+        </div>) }
+        
       </div>
-      <div>
+      {/* <div>
         <Login
           newUser={newUser}
           setEmail={setEmail}
           setPasswoard={setPasswoard}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
